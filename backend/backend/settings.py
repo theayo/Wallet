@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-from decouple import config
+from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(config("DEBUG"))
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS").split()
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 # Application definition
 
@@ -76,11 +76,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config("DATABASES_NAME"),
-        'USER': config("DATABASES_USER"),
-        'PASSWORD': config("DATABASES_PASSWORD"),
-        'HOST': config("DATABASES_HOST"),
-        'PORT': config("DATABASES_PORT"),
+        'NAME': config('DATABASES_NAME'),
+        'USER': config('DATABASES_USER'),
+        'PASSWORD': config('DATABASES_PASSWORD'),
+        'HOST': config('DATABASES_HOST'),
+        'PORT': config('DATABASES_PORT'),
     }
 }
 
