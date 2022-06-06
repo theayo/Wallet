@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     """Profile class(meta, output)"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    last_name = models.CharField(max_length=20, null=True)
     verified = models.BooleanField(default=False)
 
     def __str__(self):
