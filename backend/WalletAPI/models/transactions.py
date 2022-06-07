@@ -38,5 +38,5 @@ class Send(models.Model):
         verbose_name_plural = 'Send money'
 
     def __str__(self):
-        return self.user.email + f'({self.amount})'
+        return f'({self.amount})'
 
