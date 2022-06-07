@@ -1,5 +1,8 @@
+import uuid
+
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.crypto import salted_hmac
 
 
 class Wallet(models.Model):
@@ -14,5 +17,15 @@ class Wallet(models.Model):
         verbose_name = 'Wallet'
         verbose_name_plural = 'Wallet'
 
+    def fill(self):
+        self.usd = 0
+        self.btc = 0
+        self.usd_id = Wallet.generate_account_id()
+        self.btc_id = Wallet.generate_account_id()
+
     def __str__(self):
         return self.user.email
+
+    @staticmethod
+    def generate_account_id():
+        return uuid.uuid1()

@@ -1,6 +1,10 @@
+from django.dispatch import receiver
 from rest_framework.decorators import action, api_view
 
-from .models import Wallet
+from django.conf import settings
+from django.db.models.signals import post_save
+
+from .models import Wallet, Profile
 from .serializers import WalletSerializer, UserSerializer
 from rest_framework.views import APIView
 from rest_framework import generics
@@ -22,24 +26,19 @@ class UsersView(generics.ListAPIView):
     serializer_class = UserSerializer
 
 
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_user_wallet(sender, instance=None, created=False, **kwargs):
+    if created:
+        Wallet.objects.create(user=instance).fill()
+
+
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    @action(detail=True, methods=['get'])
+    @action(detail=False, methods=['get'])
     def get_user(self, request):
-        holder = request.user
-        resp = UserSerializer(data=holder)
-        if resp.is_valid():
-            return Response(resp.data)
-        else:
-            return Response(resp.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'POST'])
-def snippet_list(request):
-    if request.method == 'GET':
         snippets = request.user.wallet
-        serializer = WalletSerializer(snippets, many=False)
+        serializer = WalletSerializer(snippets)
         return Response(serializer.data)
