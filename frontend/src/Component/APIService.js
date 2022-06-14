@@ -1,7 +1,9 @@
 
 import axios from "axios";
+const token = ""
 
 export default class APIService {
+
 
   static UpdateArticle(article_id, body, token) {
 
@@ -55,14 +57,7 @@ export default class APIService {
       },
       body: JSON.stringify(body)
 
-    }).then(resp => {
-      const token = resp.json().data.auth_token;
-      const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
-
-      localStorage.setItem('token', token);
-      localStorage.setItem('expirationDate', expirationDate);
-    })
-
+    }).then(resp => resp.json())
   }
 
 
@@ -90,23 +85,20 @@ export default class APIService {
       },
       body: JSON.stringify(body)
 
-    }).then(resp => resp.json())
+    }).then(resp => token=resp.json().token
+    )
 
   }
 
-  static authLogin = (username, password) => {
-    return dispatch => {
-        dispatch();
-    
-        axios.post('http://127.0.0.1:8000/auth/token/login/', {
-            username: username,
-            password: password
+  static GetMoney(){
+    fetch('http://127.0.0.1:8000/api/v1/wallet/get_user_wallet/', {
+            'method': 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('auth_token')}`
+            }
         })
-        .then(res => {
-            const token = res.data.auth_token;
-
-            localStorage.setItem('token', token);
-        })
-    }
-}
+            .then(resp => resp.json())
+            .catch(error => console.log(error))
+  }
 }

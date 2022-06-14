@@ -1,5 +1,4 @@
 
-import raw from '../Component/foo.txt';
 import React, { useState, useEffect } from 'react'
 import APIService from '../Component/APIService';
 
@@ -11,16 +10,20 @@ function Login() {
     const [email, setEmail] = useState('')
 
     const [isLogin, setLogin] = useState(true)
-    const [token, setToken] = useState(['mytoken'])
+    const [token, setToken] = useState([])
 
-    const loginBtn2 = () => {
+    const loginBtn1 = () => {
         APIService.LoginUser({ username, password })
             .then(resp => setToken(resp.auth_token))
             .catch(error => console.log(error))
     }
 
+  
     const loginBtn = () => {
-        APIService.authLogin(username, password)
+        APIService.LoginUser({username, password})
+            .then(resp => localStorage.setItem('auth_token', resp.auth_token), resp => localStorage.setItem('InLogin', true))
+            .catch(error => console.log(error))
+        console.log(localStorage.getItem('auth_token'))
     }
 
     const RegisterBtn = () => {
@@ -77,6 +80,7 @@ function Login() {
                 }
 
             </div>
+            <h1>{localStorage.getItem('auth_token')}</h1>
         </div>
     )
 }

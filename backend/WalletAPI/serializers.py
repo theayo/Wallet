@@ -19,7 +19,8 @@ class UserSerializer(serializers.ModelSerializer):
 class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
-        fileds = ['card_num_16', 'card_date']
+        fileds = ('card_num_16', 'card_date')
+        exclude = ('card_holder',)
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -28,3 +29,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ('last_name', 'first_name', 'verified', 'card')
+
+
+class WithdrawSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Withdraw
+        fields = ('user', 'amount', 'time_stamp')

@@ -6,7 +6,7 @@ import Home from '../Pages/Home'
 import Transfer from '../Pages/Transfer'
 import Withdraw from '../Pages/Withdraw'
 import Login from '../Pages/Login'
-
+import Logout from '../Pages/Logout'
 
 export default class Header extends Component {
     render() {
@@ -40,6 +40,7 @@ export default class Header extends Component {
                                 />
                                 <Button variant="outline-info">Search</Button>
                             </Form>
+                            <Nav.Link href="/logout">Выйти из Аккаунта</Nav.Link>
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>
@@ -50,6 +51,7 @@ export default class Header extends Component {
                         <Route path="/transfer" element={<Transfer />} />
                         <Route path="/withdraw" element={<Withdraw />} />
                         <Route path="/login" element={<Login/>} />
+                        <Route path="/logout" element={<Logout/>} />
                     </Routes>
                 </Router>
             </>
