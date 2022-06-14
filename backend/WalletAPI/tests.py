@@ -1,7 +1,8 @@
 from .models import Wallet, Profile
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 
 class ProfileModelTest(TestCase):
@@ -22,6 +23,9 @@ class ProfileModelTest(TestCase):
         another_brick_in_the_wall.usd_id = 14
         another_brick_in_the_wall.btc_id = 15
         another_brick_in_the_wall.save()
+
+        cls.factory = RequestFactory()
+
 
     def test_user_mail_username(self):
         user = User.objects.get(pk=1)
@@ -62,3 +66,10 @@ class ProfileModelTest(TestCase):
         todo = Wallet.objects.get(pk=1)
         expected = f'{todo.usd_id}'
         self.assertEqual(expected, '14')
+
+    def test_profile_list_view(self):
+        response = self.client.get(reverse('profile-list'))
+        no_response = self.client.get('/author/100000/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(no_response.status_code, 404)
+        self.assertContains(response, 'Dean')

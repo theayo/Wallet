@@ -9,6 +9,7 @@ admin.site.site_header = 'Wallet view'
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'last_login', 'is_active')
+    list_filter = ('is_active', 'last_login')
 
     def make_active(self, request, queryset):
         rows_updated = queryset.update(is_active=True)
