@@ -21,11 +21,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-##ep1)i#vemvkyro$rv977l9!z7p+kv%)xzi+z5p(_pcr=+vno'
+SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-DEBUG=True
-ALLOWED_HOSTS=['*']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 # Application definition
 
@@ -81,8 +81,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('DATABASES_NAME'),
+        'USER': config('DATABASES_USER'),
+        'PASSWORD': config('DATABASES_PASSWORD'),
+        'HOST': config('DATABASES_HOST'),
+        'PORT': config('DATABASES_PORT'),
     }
 }
 
